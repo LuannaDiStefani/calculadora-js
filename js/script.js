@@ -433,7 +433,7 @@ function igual(){
        armazenar[toponum] = null;
 
 
-       r  = parseInt(n2) / parseInt(n1);
+       r  = parseInt(n2) % parseInt(n1);
        armazenar[toponum] = r;
    
        operadores[topoope] = null;
