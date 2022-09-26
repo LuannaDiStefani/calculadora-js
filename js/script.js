@@ -1,465 +1,249 @@
-var a = " ";
-var ope;
+var valor = " ";
+var total = 0;
+var casos;
 
-var max = 8;
+const max = 4;
 
 operadores = new Array(max);
-armazenar = new Array(max);
- 
-var topoope = 0; 
-var toponum = 0;
+numeros = new Array(max);
 
+var topo_operadores = 0;
+var topo_numeros = 0;
 
+function inserir(num) {
 
+  if (isNaN(num) == false) {
 
-function inserir(num){
-    
- var numa = num;
+    valor = valor + num;
 
-   
-if(numa >= 0){
-    
-a = a + num;
+    var numer = document.getElementById('resultado').textContent;
+    document.getElementById('resultado').textContent = numer + num;
 
-var numero = document.getElementById('resultado').innerHTML;
-document.getElementById('resultado').innerHTML = numero + num;
-    
-var nume = document.getElementById('visualizar').innerHTML ;
-document.getElementById('visualizar').innerHTML = nume + num ; 
-    
- } else if ( num != '='){
+    var nume = document.getElementById('visualizar').textContent;
+    document.getElementById('visualizar').textContent = nume + num;
 
-armazenar[toponum] = a;
-toponum++; 
-a = "";     
+  } else if (num != '=') {
 
-ope = num;
-operadores[topoope] = ope;  
+    numeros[topo_numeros] = valor;
+    topo_numeros++;
+    valor = " ";
 
-   
-var numero = document.getElementById('resultado').innerHTML;
-document.getElementById('resultado').innerHTML = numero + num;   
-document.getElementById('resultado').innerHTML = "";
+    operadores[topo_operadores] = num;
 
-var nume = document.getElementById('visualizar').innerHTML;
-document.getElementById('visualizar').innerHTML = nume + "\n" + num + "\n"; 
-     
-     
-calcular();
-     
-}else{
+    document.getElementById('resultado').textContent = " ";
 
- armazenar[toponum] = a;
- a = ""; 
+    var nume = document.getElementById('visualizar').textContent;
+    document.getElementById('visualizar').textContent = nume + "\n" + num + "\n";
 
-igual ();  
+    calcular();
 
-}     
+  } else {
+
+    numeros[topo_numeros] = valor;
+    valor = " ";
+
+    igual();
+  }
 }
 
+function calcular() {
 
-function calcular(){
+  if (topo_operadores >= 1) {
 
-if(topoope >= 1){
-    
-  
-if((operadores[0] == '*' ) || (operadores[0] == '/') || (operadores[0] == '%') ){
+    if ((operadores[0] == '*') || (operadores[0] == '/') || (operadores[0] == '%')) {
 
- var caso = operadores[0];
+      casos = operadores[0];
 
- switch(caso){
+      operacoes();
+      substituir();
 
-    case '*':   
+    } else {
 
-    toponum--;         
-    var n1 = armazenar[toponum];
-    armazenar[toponum]= null;                  
-    
-    toponum--;       
-    var n2 = armazenar[toponum];           
-    armazenar[toponum] = null; 
-            
-    var r = parseInt(n2) * parseInt(n1);              
-    armazenar[toponum] = r;
-    toponum++;
+      if ((operadores[1] == '+') || (operadores[1] == '-')) {
 
-    var subs = operadores[topoope];
-    operadores[topoope] = null;
-    topoope--;
-    operadores[topoope] = subs;
-    topoope++; 
+        casos = operadores[0];
+        operacoes();
+        substituir();
 
-    break
+      } else {
 
-    case '/':   
-
-    toponum--;         
-    var n1 = armazenar[toponum];
-    armazenar[toponum]= null;                  
-    
-    toponum--;       
-    var n2 = armazenar[toponum];           
-    armazenar[toponum] = null; 
-            
-    var r = parseInt(n2) / parseInt(n1);              
-    armazenar[toponum] = r;
-    toponum++;
-
-    var subs = operadores[topoope];
-    operadores[topoope] = null;
-    topoope--;
-    operadores[topoope] = subs;
-    topoope++; 
-
-    break
-
-    case '%':   
-
-    toponum--;         
-    var n1 = armazenar[toponum];
-    armazenar[toponum]= null;                  
-    
-    toponum--;       
-    var n2 = armazenar[toponum];           
-    armazenar[toponum] = null; 
-            
-    var r = parseInt(n2) % parseInt(n1);              
-    armazenar[toponum] = r;
-    toponum++;
-
-    var subs = operadores[topoope];
-    operadores[topoope] = null;
-    topoope--;
-    operadores[topoope] = subs;
-    topoope++; 
-
-     break
-    
-}
-} else if((operadores[0] == '+') || (operadores[0] == '-') ){
-
-   if((operadores[1] == '+') || (operadores[1] == '-' )){ 
- 
-       var casos = operadores[0];
- 
-       switch(casos){
-
-       case '+':
-
-       toponum--;
-       var n1 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-       toponum--;
-       var n2 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-       var r = parseInt(n2) + parseInt(n1);
-       armazenar[toponum] = r;
-       toponum++;
-
-       var subs = operadores[topoope];
-       operadores[topoope] = null;
-       topoope--;
-       operadores[topoope] = subs;
-       topoope++; 
-
-       break
-
-       case '-':
-
-        toponum--;
-        var n1 = armazenar[toponum];
-        armazenar[toponum] = null;
- 
-        toponum--;
-        var n2 = armazenar[toponum];
-        armazenar[toponum] = null;
- 
-        var r = parseInt(n2) - parseInt(n1);
-        armazenar[toponum] = r;
-        toponum++;
- 
-        var subs = operadores[topoope];
-        operadores[topoope] = null;
-        topoope--;
-        operadores[topoope] = subs;
-        topoope++;
-     
-        break
-
- }
-} else if((operadores[1] == '*') || (operadores[1] == '/') || (operadores[1] == '%')){
-
- precedencia();
-
- }
-}
-
-} else {    
-    
-topoope++;   
-
-}       
-}
-
-
-function precedencia(){
-
-
-if(topoope > 1){
-
-var amz = operadores[topoope];
-operadores[topoope] = null;
-topoope--;
-
-var casos = operadores[topoope];
-
-switch(casos){
-
-case '*':
-
-toponum--;
-var n1 = armazenar[toponum];
-armazenar[toponum] = null;
-
-toponum--;
-var n2 = armazenar[toponum];
-armazenar[toponum] = null
-
-var r = parseInt(n2) * parseInt(n1);
-armazenar[toponum] = r;
-toponum++;
-
-operadores[topoope] = amz;
-
-calcular();
-
-break
-
-case '/':
-
-toponum--;
-var n1 = armazenar[toponum];
-armazenar[toponum] = null;
-
-toponum--;
-var n2 = armazenar[toponum];
-armazenar[toponum] = null
-
-var r = parseInt(n2) / parseInt(n1);
-armazenar[toponum] = r;
-toponum++;
-
-operadores[topoope] = amz;
-
-calcular();
-
-break
-
-case '%':
-
-toponum--;
-var n1 = armazenar[toponum];
-armazenar[toponum] = null;
-
-toponum--;
-var n2 = armazenar[toponum];
-armazenar[toponum] = null
-
-var r = parseInt(n2) % parseInt(n1);
-armazenar[toponum] = r;
-toponum++;
-
-operadores[topoope] = amz;
-
-calcular();
-
-break
-
-}
-}else{
-
-topoope++;
-
-}
-}
-
-var total = 0; 
-
-function igual(){
-
- topoope--;
-
-   var caso = operadores[topoope];
- 
-   if(topoope == 0){
-
-   switch(caso){
-
-    case '*':   
-        
-    var n1 = armazenar[toponum];
-    armazenar[toponum]= null;                  
-    
-    toponum--;       
-    var n2 = armazenar[toponum];           
-    armazenar[toponum] = null; 
-            
-    total = parseInt(n2) * parseInt(n1);         
-   
-   break
-
-
-   case '/':   
-        
-   var n1 = armazenar[toponum];
-   armazenar[toponum]= null;                  
-   
-   toponum--;       
-   var n2 = armazenar[toponum];           
-   armazenar[toponum] = null; 
-           
-   total = parseInt(n2) / parseInt(n1); 
-
-   break
-
-
-   case '%':   
-        
-   var n1 = armazenar[toponum];
-   armazenar[toponum]= null;                  
-  
-   toponum--;       
-   var n2 = armazenar[toponum];           
-   armazenar[toponum] = null; 
-           
-   total = parseInt(n2) % parseInt(n1);             
- 
-   break
-
-    case '+':   
-        
-   var n1 = armazenar[toponum];
-   armazenar[toponum]= null;                  
- 
-    toponum--;       
-   var n2 = armazenar[toponum];           
-   armazenar[toponum] = null; 
-         
-    total = parseInt(n2)  + parseInt(n1);             
-
-   break
- 
-   case '-':   
-        
-    var n1 = armazenar[toponum];
-    armazenar[toponum]= null;                  
-    
-    toponum--;       
-    var n2 = armazenar[toponum];           
-    armazenar[toponum] = null; 
-            
-    total = parseInt(n2) - parseInt(n1); 
-
-   break
-
-   }  
-
-   }else{
-
-    calc();
- 
-     }
- 
-  var b = document.getElementById('resultado').innerHTML;
-  document.getElementById('resultado').innerHTML = " = " + total;
-  
-  var nume = document.getElementById('visualizar').innerHTML;
-  document.getElementById('visualizar').innerHTML = total; 
-  
- }
-
- 
-
-  function calc(){
-
-   var caso = operadores[topoope];
-
-   switch(caso){
-      
-      case '*':
-       
-       var n1 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-       toponum--;
-       var n2 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-       r  = parseInt(n2) * parseInt(n1);
-       armazenar[toponum] = r;
-       operadores[topoope] = null;
-   
-       igual();
-
-       break
-
-       case '/':
-      
-         var n1 = armazenar[toponum];
-         armazenar[toponum] = null;
-  
-         toponum--;
-         var n2 = armazenar[toponum];
-         armazenar[toponum] = null;
-  
-         r  = parseInt(n2) / parseInt(n1);
-         armazenar[toponum] = r;
-     
-         operadores[topoope] = null;
-     
-         igual();
-  
-         break
-
-         case '%':
-       
-       var n1 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-       toponum--;
-       var n2 = armazenar[toponum];
-       armazenar[toponum] = null;
-
-
-       r  = parseInt(n2) % parseInt(n1);
-       armazenar[toponum] = r;
-   
-       operadores[topoope] = null;
-   
-       igual();
-
-       break
+        precedencia();
 
       }
+    }
+  } else {
+
+    topo_operadores++;
+
+  }
+}
+
+function precedencia() {
+
+  if (topo_operadores > 1) {
+
+    var amz = operadores[topo_operadores];
+    operadores[topo_operadores] = null;
+    topo_operadores--;
+
+    casos = operadores[topo_operadores];
+
+    operacoes();
+
+    operadores[topo_operadores] = amz;
+
+    calcular();
+
+  } else {
+
+    topo_operadores++;
+
+  }
+}
+
+function igual() {
+
+  topo_operadores--;
+
+  if (topo_operadores == 0) {
+
+    casos = operadores[topo_operadores];
+
+    topo_numeros++;
+
+    operacoes();
+
+    topo_numeros--;
+    total = numeros[topo_numeros];
+
+  } else {
+
+    calc();
 
   }
 
-  function limpar(){
+  var b = document.getElementById('resultado').textContent;
+  document.getElementById('resultado').textContent = " = " + total;
 
-for(cont = 0; cont <= max; cont++){
-
-armazenar[toponum] = null;
-toponum--;
-
-operadores[topoope] = null;
-topoope--;
-
-document.getElementById('resultado').innerHTML = "";
-    
-document.getElementById('visualizar').innerHTML = "";
-
+  var nume = document.getElementById('visualizar').textContent;
+  document.getElementById('visualizar').textContent = total;
 
 }
- }
+
+function calc() {
+
+  casos = operadores[topo_operadores];
+
+  topo_numeros++;
+  operacoes();
+
+  operadores[topo_operadores] = null;
+  topo_numeros--;
+
+  igual();
+
+}
+
+function operacoes() {
+
+  switch (casos) {
+    case '*':
+
+      topo_numeros--;
+      var n1 = numeros[topo_numeros];
+
+      topo_numeros--;
+      var n2 = numeros[topo_numeros];
+
+      var r = parseInt(n2) * parseInt(n1);
+      numeros[topo_numeros] = r;
+      topo_numeros++;
+
+      break;
+
+    case '/':
+
+      topo_numeros--;
+      var n1 = numeros[topo_numeros];
+
+      topo_numeros--;
+      var n2 = numeros[topo_numeros];
+
+      var r = parseInt(n2) / parseInt(n1);
+      numeros[topo_numeros] = r;
+      topo_numeros++;
+
+      break
+
+    case '%':
+
+      topo_numeros--;
+      var n1 = numeros[topo_numeros];
+
+      topo_numeros--;
+      var n2 = numeros[topo_numeros];
+
+      var r = parseInt(n2) % parseInt(n1);
+      numeros[topo_numeros] = r;
+      topo_numeros++;
+
+      break
+
+    case '+':
+
+      topo_numeros--;
+      var n1 = numeros[topo_numeros];
+
+      topo_numeros--;
+      var n2 = numeros[topo_numeros];
+
+      var r = parseInt(n2) + parseInt(n1);
+      numeros[topo_numeros] = r;
+      topo_numeros++;
+
+      break
+
+    case '-':
+
+      topo_numeros--;
+      var n1 = numeros[topo_numeros];
+
+      topo_numeros--;
+      var n2 = numeros[topo_numeros];
+
+      var r = parseInt(n2) - parseInt(n1);
+      numeros[topo_numeros] = r;
+      topo_numeros++;
+
+      break
+
+  }
+}
+
+function substituir() {
+
+  var subs = operadores[topo_operadores];
+  operadores[topo_operadores] = null;
+  topo_operadores--;
+
+  operadores[topo_operadores] = subs;
+  topo_operadores++;
+
+}
+
+function limpar() {
+
+  for (cont = 0; cont <= max; cont++) {
+
+    numeros[topo_numeros] = null;
+    topo_numeros--;
+
+    operadores[topo_operadores] = null;
+    topo_operadores--
+
+  }
+
+  document.getElementById('resultado').textContent = "";
+  document.getElementById('visualizar').textContent = "";
+
+}
